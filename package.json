@@ -1,0 +1,23 @@
+{
+  "name": "kaboomsnake",
+  "version": "1.0.0",
+  "description": "",
+  "source": "src/index.html",
+  "scripts": {
+    "clean": "rimraf dist/",
+    "copy-files": "copyfiles -u 1 src/**/*.css dist/",
+    "build": "npm run clean && parcel build && npm run copy-files",
+    "start": "npm run clean && parcel && npm run copy-files"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "copyfiles": "^2.4.1",
+    "parcel": "^2.8.3",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "kaboom": "^3000.0.0-beta.3"
+  }
+}

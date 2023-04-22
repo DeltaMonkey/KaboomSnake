@@ -1,7 +1,7 @@
 import k from './kaboom';
 
-k.scene('test', () => {
-    console.log('Test scene loaded.');
-});
+import Snake from './scenes/Snake';
 
-k.go('test');
+k.scene('snake', Snake);
+
+k.go('snake');

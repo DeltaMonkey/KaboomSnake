@@ -29,6 +29,13 @@ export default function movement() {
 
             this.pos.x += direction.x * speed;
             this.pos.y += direction.y * speed;
+
+            const child = this.getChild();
+            if(!child) {
+                return;
+            }
+
+            child.moveUpdate(this.pos.x, this.pos.y);
         },
         movement: {
             left() {

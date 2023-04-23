@@ -1,5 +1,8 @@
 import k from '../kaboom';
 
+import movement from '../components/movement';
+import controls from '../components/controls';
+
 export default function Snake() {
     const {
         add,
@@ -7,12 +10,14 @@ export default function Snake() {
         rect,
         color,
         anchor,
-    } = k
+    } = k;
 
     add([
         pos(8, 8),
         rect(16, 16),
         color(0,255,0),
-        anchor('center')
+        anchor('center'),
+        movement(),
+        controls()
     ])
 }

@@ -6,6 +6,11 @@ import spawn from '../components/spawn';
 import link from '../components/link';
 import getRandomPosition from '../utils/getRandomPosition';
 
+import counter from '../components/counter';
+import overlapChecker from '../components/overlapChecker';
+import score from '../components/score';
+import { GameObj } from 'kaboom';
+
 export default function Snake() {
     const {
         debug,
@@ -22,7 +27,9 @@ export default function Snake() {
         text
     } = k;
 
-    let score: number = 0;
+    let head: GameObj;
+    let bodyCount = 0;
+    let bodyArray: any[] = [];
 
     const spawner = add([
         spawn()
@@ -31,23 +38,31 @@ export default function Snake() {
     let end: any = add([
         pos(getRandomPosition()),
         rect(16, 16),
-        color(0,255,0),
+        color(255,255,0),
         anchor('center'),
         area(),
         movement(),
         controls(),
         spawn(),
         link(),
+        counter(),
+        overlapChecker(bodyArray),
+        score(),
         'head'
     ])
+    
+    end.setCounter(0);
+    end.setScore(0);
 
+    head = end;
+    
     const scoreText = add([
         pos(2, 2),
-        text(`Score: ${score}`),
+        text(`Score: ${head.getScore()}`),
         color(255,255,255)
     ])
 
-    debug.inspect = true;
+    //debug.inspect = true;
     spawner.spawn();
 
     onCollide('head', 'food', (head, food) => {
@@ -58,37 +73,31 @@ export default function Snake() {
 
             shake(1);
 
-            score = score + 1;
+            head.setScore(head.getScore() + 1);
 
-            scoreText.text = `Score: ${score}`; 
+            scoreText.text = `Score: ${head.getScore()}`; 
+
+            bodyCount++;
 
             const newChild = add([
                 pos(end.pos.x, end.pos.y),
                 rect(16, 16),
-                color(0, 255, 0),
+                color(bodyCount*20, 255-bodyCount*20, 0),
                 anchor('center'),
                 area(),
                 link(),
+                counter(),
                 'body'
             ]);
+
+            newChild.setCounter(bodyCount);
+            
+            bodyArray.push(newChild);
 
             end.setChild(newChild);
             end = newChild;
 
             spawner.spawn();
-        }
-    });
-
-    onCollide('head', 'body', (head, body) => {
-        if(body.isNew()){
-            console.log("is new")
-            return;
-        }
-        
-        let isOverlapping = body.isOverlapping(head) ;
-        if(isOverlapping)
-        {
-            go('gameOver',  { score });
         }
     });
 }

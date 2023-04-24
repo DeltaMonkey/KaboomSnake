@@ -8,7 +8,7 @@ export default function link() {
 
     let child: any;
     const previousPosition = vec2(0,0);
-    let isNew: boolean = true;
+    //let isNew: boolean = true;
 
     return {
         add() {
@@ -30,7 +30,7 @@ export default function link() {
             this.pos.x = pos.x;
             this.pos.y = pos.y;
 
-            isNew = false;
+            //isNew = false;
 
             if(!child) {
                 return;
@@ -38,8 +38,8 @@ export default function link() {
 
             child.moveUpdate(pos.x, pos.y);
         },
-        isNew(): boolean {
+        /*isNew(): boolean {
             return isNew;
-        }
+        }*/
     }
 }

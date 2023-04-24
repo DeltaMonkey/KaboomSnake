@@ -3,6 +3,7 @@ import k from "../kaboom";
 
 export default function movement() {
     const {
+        go,
         dt,
         vec2
     } = k;
@@ -35,24 +36,47 @@ export default function movement() {
                 return;
             }
 
+            console.log(this.isOverLappingWithBody())
+            if(this.isOverLappingWithBody()){
+            //if head touching to the previous one ignore it
+            if(this.overLappedBody.getCounter()-1 != this.getCounter()){
+                var score = this.getScore();
+                go('gameOver',  { score });
+            }
+
+                
+            }
+
             child.moveUpdate(this.pos.x, this.pos.y);
         },
         movement: {
             left() {
-                direction.x = -1;
-                direction.y = 0;
+                if(direction.x != 1)
+                {
+                    direction.x = -1;
+                    direction.y = 0;
+                }
             },
             right() {
-                direction.x = 1;
-                direction.y = 0;
+                if(direction.x != -1)
+                {
+                    direction.x = 1;
+                    direction.y = 0;
+                }
             },
             up() {
-                direction.x = 0;
-                direction.y = -1;
+                if(direction.y != 1)
+                {
+                    direction.x = 0;
+                    direction.y = -1;
+                }
             },
             down() {
-                direction.x = 0;
-                direction.y = 1;
+                if(direction.y != -1)
+                {
+                    direction.x = 0;
+                    direction.y = 1;
+                }
             }
         }
     }

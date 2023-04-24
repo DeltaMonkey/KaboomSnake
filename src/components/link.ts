@@ -8,6 +8,7 @@ export default function link() {
 
     let child: any;
     const previousPosition = vec2(0,0);
+    let isNew: boolean = true;
 
     return {
         add() {
@@ -29,11 +30,16 @@ export default function link() {
             this.pos.x = pos.x;
             this.pos.y = pos.y;
 
+            isNew = false;
+
             if(!child) {
                 return;
             }
 
             child.moveUpdate(pos.x, pos.y);
+        },
+        isNew(): boolean {
+            return isNew;
         }
     }
 }

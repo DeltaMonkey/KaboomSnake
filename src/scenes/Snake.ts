@@ -1,15 +1,18 @@
 import k from '../kaboom';
 
-import movement from '../components/movement';
-import controls from '../components/controls';
-import spawn from '../components/spawn';
-import link from '../components/link';
+import movement, { MovementComp } from '../components/movement';
+import controls, { ControlsComp } from '../components/controls';
+import spawn, { SpawnComp } from '../components/spawn';
+import link, { LinkComp } from '../components/link';
 import getRandomPosition from '../utils/getRandomPosition';
+
+import counter, { CounterComp } from '../components/counter';
+import overlapChecker, { OverlapCheckerComp } from '../components/overlapChecker';
+import score, { ScoreComp } from '../components/score';
+import { AnchorComp, AreaComp, ColorComp, GameObj, PosComp, RectComp } from 'kaboom';
 
 export default function Snake() {
     const {
-        debug,
-        go,
         add,
         pos,
         rect,
@@ -22,32 +25,68 @@ export default function Snake() {
         text
     } = k;
 
-    let score: number = 0;
+    let head: GameObj & 
+              AreaComp &
+              AnchorComp &
+              MovementComp & 
+              ControlsComp & 
+              PosComp & 
+              SpawnComp & 
+              ColorComp & 
+              RectComp & 
+              LinkComp & 
+              CounterComp & 
+              CounterComp & 
+              ScoreComp & 
+              OverlapCheckerComp;
+    let bodyCount = 0;
+    let bodyArray: GameObj[] = [];
 
     const spawner = add([
         spawn()
     ]);
 
-    let end: any = add([
+    let end = add([
         pos(getRandomPosition()),
         rect(16, 16),
-        color(0,255,0),
+        color(255,255,0),
         anchor('center'),
         area(),
         movement(),
         controls(),
         spawn(),
         link(),
+        counter(),
+        overlapChecker(bodyArray),
+        score(),
         'head'
-    ])
+    ]) as GameObj & 
+          AreaComp &
+          AnchorComp &
+          MovementComp & 
+          ControlsComp & 
+          PosComp & 
+          SpawnComp & 
+          ColorComp & 
+          RectComp & 
+          LinkComp & 
+          CounterComp & 
+          CounterComp & 
+          ScoreComp & 
+          OverlapCheckerComp;
+    
+    end.setCounter(0);
+    end.setScore(0);
 
+    head = end;
+    
     const scoreText = add([
         pos(2, 2),
-        text(`Score: ${score}`),
+        text(`Score: ${head.getScore()}`),
         color(255,255,255)
     ])
 
-    debug.inspect = true;
+    //debug.inspect = true;
     spawner.spawn();
 
     onCollide('head', 'food', (head, food) => {
@@ -58,37 +97,44 @@ export default function Snake() {
 
             shake(1);
 
-            score = score + 1;
+            head.setScore(head.getScore() + 1);
 
-            scoreText.text = `Score: ${score}`; 
+            scoreText.text = `Score: ${head.getScore()}`; 
+
+            bodyCount++;
 
             const newChild = add([
                 pos(end.pos.x, end.pos.y),
                 rect(16, 16),
-                color(0, 255, 0),
+                color(bodyCount*20, 255-bodyCount*20, 0),
                 anchor('center'),
                 area(),
                 link(),
+                counter(),
                 'body'
-            ]);
+            ]) as GameObj & 
+                  AreaComp &
+                  AnchorComp &
+                  MovementComp & 
+                  ControlsComp & 
+                  PosComp & 
+                  SpawnComp & 
+                  ColorComp & 
+                  RectComp & 
+                  LinkComp & 
+                  CounterComp & 
+                  CounterComp & 
+                  ScoreComp & 
+                  OverlapCheckerComp;;
+
+            newChild.setCounter(bodyCount);
+            
+            bodyArray.push(newChild);
 
             end.setChild(newChild);
             end = newChild;
 
             spawner.spawn();
-        }
-    });
-
-    onCollide('head', 'body', (head, body) => {
-        if(body.isNew()){
-            console.log("is new")
-            return;
-        }
-        
-        let isOverlapping = body.isOverlapping(head) ;
-        if(isOverlapping)
-        {
-            go('gameOver',  { score });
         }
     });
 }

@@ -1,20 +1,18 @@
 import k from '../kaboom';
 
-import movement from '../components/movement';
-import controls from '../components/controls';
-import spawn from '../components/spawn';
-import link from '../components/link';
+import movement, { MovementComp } from '../components/movement';
+import controls, { ControlsComp } from '../components/controls';
+import spawn, { SpawnComp } from '../components/spawn';
+import link, { LinkComp } from '../components/link';
 import getRandomPosition from '../utils/getRandomPosition';
 
-import counter from '../components/counter';
-import overlapChecker from '../components/overlapChecker';
-import score from '../components/score';
-import { GameObj } from 'kaboom';
+import counter, { CounterComp } from '../components/counter';
+import overlapChecker, { OverlapCheckerComp } from '../components/overlapChecker';
+import score, { ScoreComp } from '../components/score';
+import { AnchorComp, AreaComp, ColorComp, GameObj, PosComp, RectComp } from 'kaboom';
 
 export default function Snake() {
     const {
-        debug,
-        go,
         add,
         pos,
         rect,
@@ -27,15 +25,28 @@ export default function Snake() {
         text
     } = k;
 
-    let head: GameObj;
+    let head: GameObj & 
+              AreaComp &
+              AnchorComp &
+              MovementComp & 
+              ControlsComp & 
+              PosComp & 
+              SpawnComp & 
+              ColorComp & 
+              RectComp & 
+              LinkComp & 
+              CounterComp & 
+              CounterComp & 
+              ScoreComp & 
+              OverlapCheckerComp;
     let bodyCount = 0;
-    let bodyArray: any[] = [];
+    let bodyArray: GameObj[] = [];
 
     const spawner = add([
         spawn()
     ]);
 
-    let end: any = add([
+    let end = add([
         pos(getRandomPosition()),
         rect(16, 16),
         color(255,255,0),
@@ -49,7 +60,20 @@ export default function Snake() {
         overlapChecker(bodyArray),
         score(),
         'head'
-    ])
+    ]) as GameObj & 
+          AreaComp &
+          AnchorComp &
+          MovementComp & 
+          ControlsComp & 
+          PosComp & 
+          SpawnComp & 
+          ColorComp & 
+          RectComp & 
+          LinkComp & 
+          CounterComp & 
+          CounterComp & 
+          ScoreComp & 
+          OverlapCheckerComp;
     
     end.setCounter(0);
     end.setScore(0);
@@ -89,10 +113,6 @@ export default function Snake() {
                 counter(),
                 'body'
             ]);
-
-            newChild.setCounter(bodyCount);
-            
-            bodyArray.push(newChild);
 
             end.setChild(newChild);
             end = newChild;

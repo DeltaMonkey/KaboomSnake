@@ -1,6 +1,7 @@
+import { Vec2 } from 'kaboom';
 import k from '../kaboom';
 
-export default function getRandomPosition(tileW: number = 16, tileH: number = 16) {
+export default function getRandomPosition(tileW: number = 16, tileH: number = 16): Vec2 {
     const {
         vec2,
         width,

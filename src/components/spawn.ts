@@ -2,6 +2,10 @@ import k from '../kaboom';
 
 import getRandomPosition from '../utils/getRandomPosition';
 
+export type SpawnComp = {
+    spawn(): void;
+}
+
 export default function spawn() {
     const {
         wait,

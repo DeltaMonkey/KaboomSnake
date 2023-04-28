@@ -1,8 +1,15 @@
-export default function overlapChecker(bodyList: any[]) {
+import { GameObj } from "kaboom";
+
+export type OverlapCheckerComp = {
+    isOverLappingWithBody(): boolean;
+    overLappedBody: GameObj;
+};
+
+export default function overlapChecker(bodyList: GameObj[]) {
     return {
-        isOverLappingWithBody() {
+        isOverLappingWithBody(): boolean {
             let result = false;
-            bodyList.forEach(element => {
+            bodyList.forEach((element:GameObj)  => {
                 if(this.isOverlapping(element))
                 {
                     this.overLappedBody = element;
@@ -12,5 +19,5 @@ export default function overlapChecker(bodyList: any[]) {
             return result;
         },
         overLappedBody: {}
-    }
+    } as OverlapCheckerComp
 }

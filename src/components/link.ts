@@ -1,13 +1,21 @@
-import { Vec2 } from "kaboom";
+import { GameObj, PosComp, Vec2 } from "kaboom";
 import k from "../kaboom";
+
+export type LinkComp = {
+    add(): void;
+    getChild(): GameObj;
+    setChild(c: GameObj): void;
+    moveUpdate(x: number, y: number): void;
+};
 
 export default function link() {
     const {
         vec2
     } = k
 
-    let child: any;
+    let child: GameObj & LinkComp;
     const previousPosition = vec2(0,0);
+    //let isNew: boolean = true;
     //let isNew: boolean = true;
 
     return {
@@ -18,10 +26,10 @@ export default function link() {
         getChild() {
             return child;
         },
-        setChild(c: any) {
+        setChild(c: GameObj & LinkComp) {
             child = c
         },
-        moveUpdate(x: number, y: number) {
+        moveUpdate(this: GameObj & PosComp, x: number, y: number) {
             const pos: Vec2 = previousPosition.clone();
 
             previousPosition.x = x;
@@ -30,6 +38,7 @@ export default function link() {
             this.pos.x = pos.x;
             this.pos.y = pos.y;
 
+            //isNew = false;
             //isNew = false;
 
             if(!child) {

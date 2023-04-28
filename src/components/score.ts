@@ -1,3 +1,8 @@
+export type ScoreComp = {
+    setScore(c: number): void;
+    getScore(): number;
+};
+
 export default function score() {
 
     let score: number = 0;

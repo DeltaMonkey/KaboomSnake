@@ -1,5 +1,9 @@
 import k from '../kaboom';
 
+export type ControlsComp = {
+    add(): void;
+};
+
 export default function controls()   {
     const {
         onKeyPress
